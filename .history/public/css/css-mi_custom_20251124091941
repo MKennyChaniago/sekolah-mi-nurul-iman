@@ -1,0 +1,12 @@
+/* Pastikan Hero Section selalu menggunakan padding yang cukup di mobile */
+@media screen and (max-width: 991px) {
+    .hero-section {
+        padding-top: 50px; 
+        padding-bottom: 50px;
+    }
+
+    /* Pastikan Form dan tombol tetap di tengah dan tidak terlalu lebar */
+    .hero-section .custom-form {
+        max-width: 100%; /* Atau sesuaikan agar tidak melebihi batas */
+    }
+}

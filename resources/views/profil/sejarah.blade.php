@@ -24,7 +24,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-12 mx-auto">
-                    <h3>Awal Berdirinya Madrasah</h3>
+                    <h3>COBA</h3>
                     <p>Konten sejarah MI Nurul Iman akan diletakkan di sini. Anda dapat menyalin teks panjang mengenai sejarah dan perkembangan sekolah di bagian ini.</p>
                     <p>Misalnya, informasi tahun berdiri, pendiri, dan tonggak sejarah penting madrasah.</p>
                     

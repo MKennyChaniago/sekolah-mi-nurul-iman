@@ -11,32 +11,39 @@ class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
+    /**
+     * Kemana user akan diarahkan setelah login berhasil.
+     */
     protected $redirectTo = '/admin/dashboard';
 
+    /**
+     * Create a new controller instance.
+     */
     public function __construct()
     {
-        // PERBAIKAN: Matikan baris ini! Biar controller yang pegang kendali.
-        // $this->middleware('guest')->except('logout');
+        // Middleware guest akan menendang user yang sudah login
+        // Kita perbaiki logikanya di file middleware atau di handle di sini
+        $this->middleware('guest')->except('logout');
     }
 
+    // 1. Definisikan username (kamu sudah benar)
     public function username()
     {
         return 'username';
     }
 
+    // 2. Tampilkan Form Login
     public function showLoginForm()
     {
-        // LOGIKA UTAMA:
-        // Karena middleware dimatikan, request akan masuk ke sini.
-        // Kita cek manual: Kalau sudah login -> Lempar ke Dashboard.
+        // Cek manual: Jika sudah login, langsung lempar ke dashboard
         if (Auth::check()) {
             return redirect()->route('admin.dashboard');
         }
         
-        // Kalau belum login -> Tampilkan form.
         return view('admin.login'); 
     }
 
+    // 3. Validasi Login
     protected function validateLogin(Request $request)
     {
         $request->validate([
@@ -45,6 +52,7 @@ class LoginController extends Controller
         ]);
     }
 
+    // 4. Custom Logout (Agar setelah logout lari ke halaman login/home)
     public function logout(Request $request)
     {
         $this->guard()->logout();
@@ -52,7 +60,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')
-            ->with('status', 'Anda telah berhasil logout.');
+        // Redirect ke halaman login admin lagi, atau ke home pengunjung
+        return redirect()->route('login')->with('status', 'Anda berhasil logout!');
     }
 }

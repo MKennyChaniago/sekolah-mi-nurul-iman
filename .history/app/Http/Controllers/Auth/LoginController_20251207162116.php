@@ -9,34 +9,58 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | Login Controller
+    |--------------------------------------------------------------------------
+    |
+    | Controller ini menangani autentikasi user dan redirect setelah login.
+    |
+    */
+
     use AuthenticatesUsers;
 
+    /**
+     * Kemana user akan diarahkan setelah sukses login.
+     *
+     * @var string
+     */
     protected $redirectTo = '/admin/dashboard';
 
+    /**
+     * Create a new controller instance.
+     */
     public function __construct()
     {
-        // PERBAIKAN: Matikan baris ini! Biar controller yang pegang kendali.
-        // $this->middleware('guest')->except('logout');
+        // Middleware guest mencegah user yang sudah login mengakses halaman login
+        // kecuali method 'logout'
+        $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * Tentukan field yang digunakan untuk login (Default email, kita ubah ke username).
+     */
     public function username()
     {
         return 'username';
     }
 
+    /**
+     * Tampilkan form login.
+     * PERBAIKAN LOGIC: Jika sudah login, lempar ke dashboard, jangan ke home.
+     */
     public function showLoginForm()
     {
-        // LOGIKA UTAMA:
-        // Karena middleware dimatikan, request akan masuk ke sini.
-        // Kita cek manual: Kalau sudah login -> Lempar ke Dashboard.
         if (Auth::check()) {
             return redirect()->route('admin.dashboard');
         }
         
-        // Kalau belum login -> Tampilkan form.
         return view('admin.login'); 
     }
 
+    /**
+     * Validasi input request login.
+     */
     protected function validateLogin(Request $request)
     {
         $request->validate([
@@ -45,6 +69,10 @@ class LoginController extends Controller
         ]);
     }
 
+    /**
+     * Proses Logout.
+     * Custom redirect agar setelah logout kembali ke halaman login dengan pesan.
+     */
     public function logout(Request $request)
     {
         $this->guard()->logout();

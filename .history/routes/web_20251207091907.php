@@ -111,6 +111,9 @@ Route::get('/admin/program-unggulan', function () {
 Route::get('/admin/berita', function () {
     return view('admin.berita.index');
 })->name('admin.berita.index');
+Route::get('/admin/berita', function () {
+    return view('admin.berita.index');
+})->name('admin.berita.index');
 
 Route::get('/admin/berita/create', function () {
     return view('admin.berita.create');

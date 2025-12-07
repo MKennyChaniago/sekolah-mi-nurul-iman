@@ -93,8 +93,8 @@ Route::get('/admin/kurikulum', function () {
 })->name('admin.kurikulum.index');
 
 Route::get('/admin/produk-hukum', function () {
-    return view('admin.akademik.produkhukum'); // Perlu buat file
-})->name('admin.produk_hukum.index');
+    return view('admin.akademik.produkhukum'); 
+})->name('admin.produkhukum.index');
 
 
 // --- GROUP: KESISWAAN ---

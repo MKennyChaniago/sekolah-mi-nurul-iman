@@ -55,7 +55,8 @@
     </div>
 
     <div class="row">
-      <div class="col-12 grid-margin stretch-card">
+      
+      <div class="col-md-7 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -109,6 +110,45 @@
           </div>
         </div>
       </div>
+
+      <div class="col-md-5 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Agenda Sekolah</h4>
+            <div class="list-wrapper">
+                <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
+                  <li>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="checkbox" type="checkbox" checked> Rapat Guru Bulanan
+                        <i class="input-helper"></i>
+                        <br><small class="text-muted">Senin, 08:00 WIB</small>
+                      </label>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="checkbox" type="checkbox"> Upacara Hari Pahlawan
+                        <i class="input-helper"></i>
+                        <br><small class="text-muted">10 November</small>
+                      </label>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input class="checkbox" type="checkbox"> Pembagian Rapor
+                        <i class="input-helper"></i>
+                        <br><small class="text-muted">20 Desember</small>
+                      </label>
+                    </div>
+                  </li>
+                </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="row">
@@ -128,7 +168,7 @@
                             </a>
                         </div>
                         <div class="col-6 col-md-3 mb-3">
-                            <a href="{{ route('admin.siswa.index') }}" class="btn btn-outline-success btn-icon-text w-100">
+                            <a href="#" class="btn btn-outline-success btn-icon-text w-100">
                                 <i class="mdi mdi-file-excel btn-icon-prepend"></i> Import Siswa
                             </a>
                         </div>

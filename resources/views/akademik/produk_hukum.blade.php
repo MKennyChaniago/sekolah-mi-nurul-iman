@@ -7,14 +7,14 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8 col-12">
-                    <nav aria-label="breadcrumb">
+                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
                             <li class="breadcrumb-item"><a href="#">Akademik</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Produk Hukum</li>
                         </ol>
                     </nav>
-                    <h2 class="text-white">Dokumen & Produk Hukum Madrasah</h2>
+                    <h2 class="text-white">Dokumen & Produk Hukum</h2>
                 </div>
             </div>
         </div>
@@ -25,37 +25,42 @@
             <div class="row">
                 <div class="col-lg-10 col-12 mx-auto">
                     
-                    <p class="mb-5">Halaman ini menyediakan akses ke dokumen dan peraturan resmi terkait kebijakan akademik dan administrasi di MI Nurul Iman.</p>
-                    
-                    <div class="list-group">
-                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5>Keputusan Kepala Madrasah tentang Kurikulum Merdeka 2025</h5>
-                                <small class="text-muted">Nomor 01/SK/MI-NI/VII/2025 | Tipe: SK</small>
-                            </div>
-                            <span class="badge bg-primary rounded-pill"><i class="bi-cloud-download me-1"></i> Unduh</span>
-                        </a>
-
-                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5>Peraturan Akademik MI Nurul Iman Tahun Pelajaran 2025/2026</h5>
-                                <small class="text-muted">Tanggal Rilis: 10 Juli 2025 | Tipe: Peraturan</small>
-                            </div>
-                            <span class="badge bg-success rounded-pill"><i class="bi-cloud-download me-1"></i> Unduh</span>
-                        </a>
-
-                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5>Juknis Penerimaan Peserta Didik Baru (PPDB) 2026</h5>
-                                <small class="text-muted">Tanggal Rilis: 01 September 2025 | Tipe: Juknis</small>
-                            </div>
-                            <span class="badge bg-warning text-dark rounded-pill"><i class="bi-cloud-download me-1"></i> Unduh</span>
-                        </a>
+                    <div class="custom-block bg-white shadow-lg p-5">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="py-3">Judul Dokumen</th>
+                                        <th class="py-3">Kategori</th>
+                                        <th class="py-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($documents as $document)
+                                    <tr>
+                                        <td class="align-middle">
+                                            <i class="bi-file-earmark-text me-2 text-secondary"></i>
+                                            {{ $document->title }}
+                                        </td>
+                                        <td class="align-middle"><span class="badge bg-info text-dark">{{ $document->category }}</span></td>
+                                        <td class="text-center align-middle">
+                                            <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank" class="btn custom-btn btn-sm">
+                                                <i class="bi-download me-1"></i> Unduh
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="3" class="text-center py-4">Belum ada dokumen yang diunggah.</td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
     </section>
-
 @endsection

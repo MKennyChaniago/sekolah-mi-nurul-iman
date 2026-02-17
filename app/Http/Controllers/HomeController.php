@@ -3,7 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Berita; // Pastikan Model Berita sudah ada
+use App\Models\Berita;
+use App\Models\Guru;
+use App\Models\Gallery;
+use App\Models\SchoolProfile;
+use App\Models\Subject;
+use App\Models\Document;
+use App\Models\Extracurricular;
+use App\Models\Program;
 
 class HomeController extends Controller
 {
@@ -12,15 +19,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // Mengambil 3 berita terbaru (jika ada tabel berita)
-        // Jika belum ada tabel/data, kita return collection kosong biar gak error
-        try {
-            $beritaTerbaru = Berita::latest()->take(3)->get();
-        } catch (\Exception $e) {
-            $beritaTerbaru = collect([]); // Kosongkan jika database belum siap
-        }
+        // Mengambil berita terbaru
+        $beritaTerbaru = Berita::where('status', 'published')->latest()->take(3)->get();
+        // Mengambil program unggulan
+        $programs = Program::take(4)->get();
+        // Mengambil profil untuk sambutan
+        $profile = SchoolProfile::first();
+        // Mengambil galeri terbaru
+        $homeGalleries = Gallery::latest()->take(3)->get();
 
-        return view('home', compact('beritaTerbaru'));
+        return view('home', compact('beritaTerbaru', 'programs', 'profile', 'homeGalleries'));
     }
 
     /**
@@ -28,22 +36,20 @@ class HomeController extends Controller
      */
     public function sejarah()
     {
-        // Pastikan ada file: resources/views/profil/sejarah.blade.php
-        return view('profil.sejarah');
+        $profile = SchoolProfile::first();
+        return view('profil.sejarah', compact('profile'));
     }
 
     public function visiMisi()
     {
-        // Pastikan ada file: resources/views/profil/visi_misi.blade.php
-        // Cek nama file kamu, apakah 'visimisi.blade.php' atau 'visi_misi.blade.php'
-        // Sesuaikan string di bawah ini dengan nama file aslimu:
-        return view('profil.visi_misi'); 
+        $profile = SchoolProfile::first();
+        return view('profil.visi_misi', compact('profile')); 
     }
 
     public function struktur()
     {
-        // Pastikan ada file: resources/views/profil/struktur.blade.php
-        return view('profil.struktur');
+        $profile = SchoolProfile::first();
+        return view('profil.struktur', compact('profile'));
     }
 
     /**
@@ -51,9 +57,9 @@ class HomeController extends Controller
      */
     public function kesiswaan()
     {
-        // Pastikan ada file: resources/views/kesiswaan/index.blade.php
-        // Atau sesuaikan jika filenya bernama kesiswaan.blade.php
-        return view('kesiswaan.index'); 
+        $ekskuls = Extracurricular::all();
+        $programs = Program::all();
+        return view('kesiswaan.index', compact('ekskuls', 'programs')); 
     }
 
     /**
@@ -61,20 +67,21 @@ class HomeController extends Controller
      */
     public function berita()
     {
-        // Mengambil berita dengan pagination
-        try {
-            $beritas = Berita::latest()->paginate(6);
-        } catch (\Exception $e) {
-            $beritas = collect([]);
-        }
+        $beritas = Berita::where('status', 'published')->latest()->paginate(9);
         return view('berita.listing', compact('beritas'));
     }
 
     public function detailBerita($slug)
     {
-        // Mencari berita berdasarkan slug
-        $berita = Berita::where('slug', $slug)->firstOrFail();
-        return view('berita.detail', compact('berita'));
+        $berita = Berita::where('slug', $slug)->where('status', 'published')->firstOrFail();
+        // Berita terkait
+        $relatedNews = Berita::where('status', 'published')
+                            ->where('id', '!=', $berita->id)
+                            ->latest()
+                            ->take(3)
+                            ->get();
+                            
+        return view('berita.detail', compact('berita', 'relatedNews'));
     }
 
     /**
@@ -82,18 +89,22 @@ class HomeController extends Controller
      */
     public function kurikulum()
     {
-        return view('akademik.kurikulum');
+        // Grouping mata pelajaran
+        $subjects = Subject::orderBy('group')->orderBy('name')->get()->groupBy('group');
+        return view('akademik.kurikulum', compact('subjects'));
     }
 
     public function guru()
     {
-        // Nanti bisa ditambah: $gurus = Guru::all();
-        return view('akademik.guru_staff');
+        $gurus = Guru::orderBy('position')->get(); 
+        // Bisa di-grouping berdasarkan status atau lainnya jika perlu
+        return view('akademik.guru_staff', compact('gurus'));
     }
 
     public function produkHukum()
     {
-        return view('akademik.produk_hukum');
+        $documents = Document::latest()->get();
+        return view('akademik.produk_hukum', compact('documents'));
     }
 
     /**
@@ -101,15 +112,9 @@ class HomeController extends Controller
      */
     public function galeri()
     {
-        return view('galeri.index');
+        $galleries = Gallery::latest()->paginate(12);
+        return view('galeri.index', compact('galleries'));
     }
 
-    /**
-     * 7. Kontak
-     */
-    public function kontak()
-    {
-        // Pastikan file: resources/views/kontak.blade.php ada
-        return view('kontak');
-    }
+
 }

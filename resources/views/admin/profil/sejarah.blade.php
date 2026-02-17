@@ -1,44 +1,47 @@
 @extends('layouts.admin')
 
-@section('title', 'Sejarah Madrasah')
-
 @section('content')
-<div class="page-header">
-    <h3 class="page-title"> Sejarah Madrasah </h3>
-    <nav aria-label="breadcrumb">
-        <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Sejarah</li>
-        </ul>
-    </nav>
-</div>
-
 <div class="row">
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Edit Sejarah Singkat</h4>
-                <p class="card-description"> Ceritakan perjalanan berdirinya MI Nurul Iman </p>
+                <h4 class="card-title">Edit Sejarah Sekolah</h4>
+                <p class="card-description">Update sejarah singkat sekolah dan fotonya</p>
                 
-                <form class="forms-sample">
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                <form class="forms-sample" action="{{ route('admin.sejarah.update') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    
                     <div class="form-group">
-                        <label>Foto Gedung / Sejarah (Opsional)</label>
-                        <input type="file" name="img[]" class="file-upload-default">
-                        <div class="input-group col-xs-12">
-                            <input type="file" class="form-control file-upload-info" placeholder="Upload Image">
-                        </div>
+                        <label for="history">Isi Sejarah</label>
+                        <textarea class="form-control @error('history') is-invalid @enderror" id="history" name="history" rows="15" required>{{ old('history', $profile->history) }}</textarea>
+                        @error('history')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="form-group">
-                        <label for="sejarah">Isi Sejarah</label>
-                        <textarea class="form-control" id="sejarah" rows="15">
-MI Nurul Iman didirikan pada tahun 1990 oleh.... (Ini contoh teks dummy, nanti Admin bisa edit di sini).
-
-Awalnya madrasah ini hanya memiliki 3 ruang kelas...
-                        </textarea>
+                        <label for="history_image">Foto / Ilustrasi Sejarah</label>
+                        <input type="file" class="form-control @error('history_image') is-invalid @enderror" id="history_image" name="history_image" accept="image/*">
+                        <small class="text-muted">Biarkan kosong jika tidak ingin mengubah foto.</small>
+                        @if($profile->history_image)
+                            <div class="mt-2">
+                                <img src="{{ asset('storage/' . $profile->history_image) }}" alt="Current History Image" style="max-height: 200px; border-radius: 4px;">
+                            </div>
+                        @endif
+                        @error('history_image')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <button type="submit" class="btn btn-gradient-primary me-2">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-primary me-2">Simpan Perubahan</button>
                 </form>
             </div>
         </div>

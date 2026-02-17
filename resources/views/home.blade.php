@@ -17,7 +17,7 @@
                         </form>
                     
                     <div class="text-center mt-4 d-flex justify-content-center flex-wrap">
-                        <a href="{{ route('kontak') }}" class="btn btn-warning custom-btn custom-border-btn me-lg-3 mb-2 mb-lg-0">PPDB T.A. 2025/2026 DIBUKA!</a>
+                        <a href="{{ $profile->ppdb_link ?? '#' }}" target="_blank" class="btn btn-warning custom-btn custom-border-btn me-lg-3 mb-2 mb-lg-0">PPDB T.A. 2025/2026 DIBUKA!</a>
                         <a href="{{ route('login') }}" class="btn custom-btn custom-border-btn">Login Admin</a>
                     </div>
                 </div>
@@ -29,33 +29,66 @@
         <div class="container">
             <div class="row justify-content-center">
 
-                <div class="col-lg-8 col-12 mb-4 mb-lg-0">
-                    <div class="custom-block bg-white shadow-lg p-4">
-                        <h2 class="mb-3">SAMBUTAN KEPALA MADRASAH</h2>
-                        <div class="d-flex mb-3">
-                            <img src="{{ asset('images/kepala-madrasah.jpg') }}" class="img-fluid me-3 rounded-circle" style="width: 120px; height: 120px; object-fit: cover;" alt="Kepala Madrasah">
-                            <div>
-                                <h5 class="mb-1">Nama Lengkap Kepala Sekolah</h5>
-                                <p class="text-muted">Kepala MI Nurul Iman</p>
-                            </div>
+                <div class="col-lg-7 col-12 mb-4 mb-lg-0">
+                    <div class="custom-block bg-white shadow-lg p-4 h-100">
+                        
+                        <div class="text-center mb-4">
+                            @if($profile && $profile->headmaster_photo)
+                                <img src="{{ asset('storage/' . $profile->headmaster_photo) }}"
+                                    class="rounded-circle shadow-sm mb-3"
+                                    style="width:130px;height:130px;object-fit:cover;"
+                                    alt="Kepala Madrasah">
+                            @else
+                                <img src="{{ asset('images/kepala/kepala-madrasah.jpeg') }}"
+                                    class="rounded-circle shadow-sm mb-3"
+                                    style="width:130px;height:130px;object-fit:cover;"
+                                    alt="Kepala Madrasah">
+                            @endif
+
+                            <h4 class="fw-bold mb-1">{{ $profile->headmaster_name ?? 'Ahmad Hanafi' }}</h4>
+                            <p class="text-muted mb-0">Kepala MI Nurul Iman</p>
                         </div>
 
                         <p>Assalamualaikum Warahmatullahi Wabarakatuh,</p>
-                        <p>Dengan rahmat Allah SWT, kami menyambut baik kehadiran Anda di website resmi MI Nurul Iman. Website ini kami dedikasikan sebagai sarana informasi, komunikasi, dan publikasi segala kegiatan akademik dan non-akademik madrasah kami. Kami berharap website ini dapat menjadi jembatan penghubung yang efektif antara madrasah, siswa, orang tua, dan masyarakat.</p>
-                        <a href="#" class="btn btn-link p-0">Baca Sambutan Lengkap...</a>
+                        <div class="text-muted">
+                            {!! nl2br(e($profile->headmaster_welcome ?? 'Selamat datang di website resmi MI Nurul Iman. Kami berkomitmen untuk memberikan pendidikan terbaik bagi putra-putri Anda.')) !!}
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-lg-4 col-12">
-                    <div class="custom-block custom-block-overlay p-4 bg-light shadow-lg">
-                        <h4 class="mb-3 text-dark">INFORMASI PENTING</h4>
-                        <hr>
-                        <ul class="list-unstyled">
-                             <li><a href="#" class="text-dark d-block py-1"><i class="bi-file-earmark-text-fill me-2"></i> Pengumuman Kelulusan Siswa Kelas VI</a></li>
-                             <li><a href="#" class="text-dark d-block py-1"><i class="bi-calendar-check-fill me-2"></i> Jadwal Pendaftaran Siswa Baru (PPDB)</a></li>
-                             <li><a href="#" class="text-dark d-block py-1"><i class="bi-download me-2"></i> Download Formulir Pendaftaran</a></li>
-                        </ul>
-                        <a href="#" class="btn custom-btn btn-sm mt-3">Semua Pengumuman</a>
+                <div class="col-lg-5 col-12">
+                    <div class="custom-block p-4 bg-white shadow-lg h-100 border-top border-4 border-primary">
+                        <h4 class="mb-4 text-dark text-center">PROGRAM UNGGULAN</h4>
+                        
+                        <div class="d-flex flex-column gap-3">
+                            @forelse($programs as $program)
+                                <div class="d-flex align-items-center p-3 rounded bg-light hover-shadow transition-all">
+                                    <div class="flex-shrink-0">
+                                        <i class="bi-check-circle-fill text-primary fs-4"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="mb-0 fw-bold">{{ $program->title }}</h6>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="d-flex align-items-center p-3 rounded bg-light">
+                                    <i class="bi-file-earmark-text-fill me-3 text-primary fs-5"></i>
+                                    <span class="fw-bold">Tahfidz Qur'an</span>
+                                </div>
+                                <div class="d-flex align-items-center p-3 rounded bg-light">
+                                    <i class="bi-calendar-check-fill me-3 text-primary fs-5"></i>
+                                    <span class="fw-bold">Bahasa Arab Intensif</span>
+                                </div>
+                                <div class="d-flex align-items-center p-3 rounded bg-light">
+                                    <i class="bi-laptop me-3 text-primary fs-5"></i>
+                                    <span class="fw-bold">Sains & Teknologi</span>
+                                </div>
+                            @endforelse
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <a href="{{ route('kesiswaan') }}" class="btn btn-outline-primary btn-sm rounded-pill px-4">Lihat Selengkapnya <i class="bi-arrow-right ms-1"></i></a>
+                        </div>
                     </div>
                 </div>
 
@@ -76,48 +109,37 @@
             <div class="row">
                 <div class="col-12">
                     <div class="row">
+                        @forelse($beritaTerbaru as $berita)
                         <div class="col-lg-4 col-md-6 col-12 mb-4">
-                            <div class="custom-block bg-white shadow-lg">
-                                <a href="#">
-                                    <img src="{{ asset('images/berita/kegiatan-olahraga.jpg') }}" class="custom-block-image img-fluid" alt="Kegiatan Olahraga">
+                            <div class="custom-block bg-white shadow-lg h-100">
+                                <a href="{{ route('berita.detail', $berita->slug) }}">
+                                    @if($berita->thumbnail)
+                                        <img src="{{ asset('storage/' . $berita->thumbnail) }}" class="custom-block-image img-fluid w-100" style="height: 250px; object-fit: cover;" alt="{{ $berita->title }}">
+                                    @else
+                                        <img src="{{ asset('images/berita/kegiatan-olahraga.jpg') }}" class="custom-block-image img-fluid w-100" style="height: 250px; object-fit: cover;" alt="Default Image">
+                                    @endif
+                                    
                                     <div class="d-flex p-3">
                                         <div>
-                                            <h5 class="mb-2">Juara 1 Lomba Olahraga Antar Madrasah</h5>
-                                            <p class="mb-0 text-muted small"><i class="bi-calendar me-1"></i> 15 November 2025</p>
+                                            <h5 class="mb-2 text-truncate" style="max-width: 300px;">{{ $berita->title }}</h5>
+                                            <p class="mb-0 text-muted small">
+                                                <i class="bi-calendar me-1"></i> {{ $berita->published_at ? date('d M Y', strtotime($berita->published_at)) : $berita->created_at->format('d M Y') }}
+                                                <span class="mx-2">|</span>
+                                                <i class="bi-tag me-1"></i> {{ $berita->category }}
+                                            </p>
                                         </div>
                                     </div>
                                 </a>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-12 mb-4">
-                            <div class="custom-block bg-white shadow-lg">
-                                <a href="#">
-                                    <img src="{{ asset('images/berita/rapat-guru.jpg') }}" class="custom-block-image img-fluid" alt="Rapat Guru">
-                                    <div class="d-flex p-3">
-                                        <div>
-                                            <h5 class="mb-2">Rapat Persiapan Ujian Semester Ganjil</h5>
-                                            <p class="mb-0 text-muted small"><i class="bi-calendar me-1"></i> 01 November 2025</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
+                        @empty
+                        <div class="col-12 text-center">
+                            <p>Belum ada berita terbaru.</p>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-12 mb-4">
-                            <div class="custom-block bg-white shadow-lg">
-                                <a href="#">
-                                    <img src="{{ asset('images/berita/pramuka.jpg') }}" class="custom-block-image img-fluid" alt="Kegiatan Pramuka">
-                                    <div class="d-flex p-3">
-                                        <div>
-                                            <h5 class="mb-2">Latihan Rutin Pramuka: Menjaga Semangat Persatuan</h5>
-                                            <p class="mb-0 text-muted small"><i class="bi-calendar me-1"></i> 29 Oktober 2025</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+                        @endforelse
                         
                         <div class="col-12 text-center mt-3">
-                             <a href="#" class="btn custom-btn custom-border-btn">Lihat Semua Berita</a>
+                             <a href="{{ route('berita.listing') }}" class="btn custom-btn custom-border-btn">Lihat Semua Berita</a>
                         </div>
                     </div>
                 </div>
@@ -142,25 +164,20 @@
 
                             <li>
                                 <h4 class="text-white mb-3">Visi Madrasah</h4>
-                                <p class="text-white">Menjadi madrasah unggul yang melahirkan generasi cerdas, mandiri, dan berakhlak mulia di era digital.</p>
+                                <p class="text-white">{{ $profile->vision ?? 'Menjadi madrasah unggul yang melahirkan generasi cerdas, mandiri, dan berakhlak mulia.' }}</p>
                                 <div class="icon-holder">
                                   <i class="bi-brightness-high"></i>
                                 </div>
                             </li>
                             
-                            <li>
-                                <h4 class="text-white mb-3">Misi 1: Keunggulan Akademik</h4>
-                                <p class="text-white">Meningkatkan mutu pembelajaran berbasis teknologi untuk mencapai prestasi akademik yang optimal.</p>
+                            <!-- Menampilkan Misi - Jika formatnya poin-poin/text panjang, kita tampilkan saja -->
+                             <li>
+                                <h4 class="text-white mb-3">Misi Madrasah</h4>
+                                <div class="text-white fw-light">
+                                    {!! nl2br(e($profile->mission ?? '1. Meningkatkan mutu pendidikan.\n2. Membentuk karakter islami.')) !!}
+                                </div>
                                 <div class="icon-holder">
                                   <i class="bi-book"></i>
-                                </div>
-                            </li>
-
-                            <li>
-                                <h4 class="text-white mb-3">Misi 2: Pembentukan Karakter</h4>
-                                <p class="text-white">Membentuk peserta didik yang berkarakter islami, memiliki kedisiplinan tinggi, dan bertanggung jawab terhadap lingkungan.</p>
-                                <div class="icon-holder">
-                                  <i class="bi-people-fill"></i>
                                 </div>
                             </li>
                         </ul>
@@ -168,7 +185,7 @@
                 </div>
                 
                 <div class="col-12 text-center mt-5">
-                    <a href="#" class="btn custom-btn custom-border-btn ms-3">Lihat Profil Lengkap</a>
+                    <a href="{{ route('profil.visi_misi') }}" class="btn custom-btn custom-border-btn ms-3">Lihat Detail Profil</a>
                 </div>
             </div>
         </div>
@@ -181,7 +198,12 @@
                     <h2 class="mb-5">GALERI KEGIATAN</h2>
                 </div>
                 
+                @forelse($homeGalleries as $gallery)
                 <div class="col-lg-4 col-md-6 col-12 mb-4">
+                    <img src="{{ asset('storage/' . $gallery->image) }}" class="img-fluid rounded shadow-sm w-100" style="height: 250px; object-fit: cover;" alt="{{ $gallery->title }}">
+                </div>
+                @empty
+                 <div class="col-lg-4 col-md-6 col-12 mb-4">
                     <img src="{{ asset('images/galeri/foto1.jpg') }}" class="img-fluid rounded shadow-sm" alt="Galeri 1">
                 </div>
                 <div class="col-lg-4 col-md-6 col-12 mb-4">
@@ -190,9 +212,10 @@
                 <div class="col-lg-4 col-md-6 col-12 mb-4">
                     <img src="{{ asset('images/galeri/foto3.jpg') }}" class="img-fluid rounded shadow-sm" alt="Galeri 3">
                 </div>
+                @endforelse
                 
                 <div class="col-12 text-center mt-3">
-                     <a href="#" class="btn custom-btn custom-border-btn">Lihat Semua Foto & Video</a>
+                     <a href="{{ route('galeri') }}" class="btn custom-btn custom-border-btn">Lihat Semua Galeri</a>
                 </div>
 
             </div>
@@ -208,7 +231,7 @@
                 </div>
 
                 <div class="col-lg-5 col-12 mb-4 mb-lg-0">
-                    <iframe class="google-map" src="https://maps.google.com/maps?q=Nama%20Sekolah%20Anda&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe class="google-map" src="{{ $schoolProfile->maps_embed ?? 'https://maps.google.com/maps?q=MI%20Nurul%20Iman&t=&z=13&ie=UTF8&iwloc=&output=embed' }}" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
 
                 <div class="col-lg-7 col-12 ms-auto">
@@ -216,25 +239,33 @@
                     
                     <p class="d-flex align-items-center mb-2">
                         <i class="bi-geo-alt me-2"></i>
-                        Jl. Nama Jalan Sekolah Anda No. XXX, Kota Anda
+                        {{ $schoolProfile->address ?? 'Jl. Contoh No. 123, Kota Anda' }}
                     </p>
 
                     <p class="d-flex align-items-center mb-2">
                         <i class="bi-telephone me-2"></i>
-                        <a href="tel:1234567890" class="site-footer-link">123-456-7890 (Telepon Kantor)</a>
+                        <a href="tel:{{ $schoolProfile->phone ?? '#' }}" class="site-footer-link">{{ $schoolProfile->phone ?? '0812-3456-789' }}</a>
                     </p>
 
                     <p class="d-flex align-items-center mb-2">
                         <i class="bi-envelope me-2"></i>
-                        <a href="mailto:info@minuruliman.sch.id" class="site-footer-link">info@minuruliman.sch.id</a>
+                        <a href="mailto:{{ $schoolProfile->email ?? '#' }}" class="site-footer-link">{{ $schoolProfile->email ?? 'info@minuruliman.sch.id' }}</a>
                     </p>
 
                     <h4 class="mt-4 mb-3">Media Sosial</h4>
                     <ul class="social-icon">
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-facebook"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-twitter"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-instagram"></a></li>
-                        <li class="social-icon-item"><a href="#" class="social-icon-link bi-youtube"></a></li>
+                        @if($schoolProfile->facebook)
+                            <li class="social-icon-item"><a href="{{ $schoolProfile->facebook }}" class="social-icon-link bi-facebook"></a></li>
+                        @endif
+                        @if($schoolProfile->instagram)
+                            <li class="social-icon-item"><a href="{{ $schoolProfile->instagram }}" class="social-icon-link bi-instagram"></a></li>
+                        @endif
+                        @if($schoolProfile->youtube)
+                            <li class="social-icon-item"><a href="{{ $schoolProfile->youtube }}" class="social-icon-link bi-youtube"></a></li>
+                        @endif
+                        @if(!$schoolProfile->facebook && !$schoolProfile->instagram && !$schoolProfile->youtube)
+                             <li class="social-icon-item"><span class="text-muted small">Belum ada media sosial.</span></li>
+                        @endif
                     </ul>
                 </div>
             </div>

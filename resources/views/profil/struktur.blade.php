@@ -7,14 +7,14 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8 col-12">
-                    <nav aria-label="breadcrumb">
+                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
                             <li class="breadcrumb-item"><a href="#">Profil</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Struktur Organisasi</li>
                         </ol>
                     </nav>
-                    <h2 class="text-white">Struktur Organisasi Madrasah</h2>
+                    <h2 class="text-white">Struktur Organisasi</h2>
                 </div>
             </div>
         </div>
@@ -23,14 +23,16 @@
     <section class="section-padding">
         <div class="container">
             <div class="row">
-                <div class="col-lg-10 col-12 mx-auto text-center">
-                    <h3>Bagan Organisasi</h3>
-                    <p>Bagan Struktur Organisasi MI Nurul Iman Tahun Ajaran 2025/2026</p>
+                <div class="col-12 text-center">
+                    <h3 class="mb-5">Struktur Organisasi MI Nurul Iman</h3>
                     
-                    <div class="mt-4 p-5 border rounded bg-light">
-                        [Gambar Bagan Struktur Organisasi MI Nurul Iman]
-                        <p class="mt-3 text-muted">Silakan ganti teks ini dengan gambar bagan struktur organisasi madrasah.</p>
-                    </div>
+                    @if($profile && $profile->structure_image)
+                        <img src="{{ asset('storage/' . $profile->structure_image) }}" class="img-fluid rounded shadow" alt="Struktur Organisasi">
+                    @else
+                        <div class="alert alert-info">
+                            Gambar struktur organisasi belum tersedia.
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

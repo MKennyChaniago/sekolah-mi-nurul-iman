@@ -42,7 +42,7 @@ Route::get('/berita', [HomeController::class, 'berita'])->name('berita.listing')
 Route::get('/berita/{slug}', [HomeController::class, 'detailBerita'])->name('berita.detail');
 Route::get('/guru-staff', [HomeController::class, 'guru'])->name('akademik.guru_staff');
 Route::get('/galeri', [HomeController::class, 'galeri'])->name('galeri');
-Route::get('/kontak', [HomeController::class, 'kontak'])->name('kontak');
+
 Route::get('/kesiswaan', [HomeController::class, 'kesiswaan'])->name('kesiswaan');
 Route::get('/kurikulum', [HomeController::class, 'kurikulum'])->name('akademik.kurikulum');
 Route::get('/produk-hukum', [HomeController::class, 'produkHukum'])->name('akademik.produk_hukum');
@@ -62,13 +62,12 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     // Resource Routes
-    Route::resource('berita', BeritaController::class);
+    Route::resource('berita', BeritaController::class)->parameters(['berita' => 'berita']);
     Route::resource('guru', GuruController::class);
     Route::resource('galeri', GaleriController::class);
+    Route::resource('siswa', SiswaController::class); // Changed to resource
     
-    // Custom Routes
-    Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index');
-    
+    // Profil Routes
     Route::get('/sejarah', [ProfilController::class, 'editSejarah'])->name('sejarah');
     Route::put('/sejarah', [ProfilController::class, 'updateSejarah'])->name('sejarah.update');
     
@@ -78,8 +77,35 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/struktur', [ProfilController::class, 'editStruktur'])->name('struktur');
     Route::put('/struktur', [ProfilController::class, 'updateStruktur'])->name('struktur.update');
 
+    Route::get('/kontak', [ProfilController::class, 'editKontak'])->name('kontak');
+    Route::put('/kontak', [ProfilController::class, 'updateKontak'])->name('kontak.update');
+
+    Route::get('/beranda', [ProfilController::class, 'editBeranda'])->name('beranda');
+    Route::put('/beranda', [ProfilController::class, 'updateBeranda'])->name('beranda.update');
+
+    // Akademik Routes
+    // Kurikulum
     Route::get('/kurikulum', [AkademikController::class, 'kurikulum'])->name('kurikulum.index');
+    Route::post('/kurikulum', [AkademikController::class, 'storeKurikulum'])->name('kurikulum.store');
+    Route::put('/kurikulum/{subject}', [AkademikController::class, 'updateKurikulum'])->name('kurikulum.update');
+    Route::delete('/kurikulum/{subject}', [AkademikController::class, 'destroyKurikulum'])->name('kurikulum.destroy');
+
+    // Produk Hukum
     Route::get('/produk-hukum', [AkademikController::class, 'produkHukum'])->name('produk_hukum.index');
+    Route::post('/produk-hukum', [AkademikController::class, 'storeProdukHukum'])->name('produk_hukum.store');
+    Route::put('/produk-hukum/{document}', [AkademikController::class, 'updateProdukHukum'])->name('produk_hukum.update');
+    Route::delete('/produk-hukum/{document}', [AkademikController::class, 'destroyProdukHukum'])->name('produk_hukum.destroy');
+
+    // Kesiswaan Routes
+    // Ekstrakurikuler
     Route::get('/ekstrakurikuler', [KesiswaanController::class, 'ekskul'])->name('ekstrakurikuler.index');
+    Route::post('/ekstrakurikuler', [KesiswaanController::class, 'storeEkskul'])->name('ekstrakurikuler.store');
+    Route::put('/ekstrakurikuler/{extracurricular}', [KesiswaanController::class, 'updateEkskul'])->name('ekstrakurikuler.update');
+    Route::delete('/ekstrakurikuler/{extracurricular}', [KesiswaanController::class, 'destroyEkskul'])->name('ekstrakurikuler.destroy');
+
+    // Program Unggulan
     Route::get('/program-unggulan', [KesiswaanController::class, 'program'])->name('program.index');
+    Route::post('/program-unggulan', [KesiswaanController::class, 'storeProgram'])->name('program.store');
+    Route::put('/program-unggulan/{program}', [KesiswaanController::class, 'updateProgram'])->name('program.update');
+    Route::delete('/program-unggulan/{program}', [KesiswaanController::class, 'destroyProgram'])->name('program.destroy');
 });

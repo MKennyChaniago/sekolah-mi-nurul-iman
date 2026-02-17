@@ -1,108 +1,89 @@
 @extends('layouts.admin')
 
-@section('title', 'Data Guru & Staff')
-
 @section('content')
-    <div class="page-header">
-        <h3 class="page-title">
-            <span class="page-title-icon bg-gradient-primary text-white me-2">
-                <i class="mdi mdi-account-group"></i>
-            </span> Data Guru & Tenaga Kependidikan
-        </h3>
-        <nav aria-label="breadcrumb">
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Data Guru</li>
-            </ul>
-        </nav>
-    </div>
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="card-title">Data Guru & Staff</h4>
+                    <a href="{{ route('admin.guru.create') }}" class="btn btn-primary btn-sm">
+                        <i class="mdi mdi-plus"></i> Tambah Guru/Staff
+                    </a>
+                </div>
 
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4 class="card-title">Daftar Guru MI Nurul Iman</h4>
-                        <a href="{{ route('admin.guru.create') }}" class="btn btn-primary btn-sm">
-                            <i class="mdi mdi-plus"></i> Tambah Guru Baru
-                        </a>
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+                @endif
 
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Foto</th>
-                                    <th>Nama Lengkap</th>
-                                    <th>NIP / NUPTK</th>
-                                    <th>Jabatan</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td class="py-1">
-                                        <img src="{{ asset('admin/images/faces/face1.jpg') }}" alt="image" />
-                                    </td>
-                                    <td>Ahmad Fauzi, S.Pd.I</td>
-                                    <td>19850101 201001 1 001</td>
-                                    <td>Guru Kelas 6</td>
-                                    <td><label class="badge badge-gradient-success">PNS</label></td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm btn-icon-text">
-                                            <i class="mdi mdi-pencil"></i> Edit
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Foto</th>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Jabatan</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($gurus as $index => $guru)
+                            <tr>
+                                <td>{{ $index + $gurus->firstItem() }}</td>
+                                <td>
+                                    @if($guru->photo)
+                                        <img src="{{ asset('storage/' . $guru->photo) }}" alt="Foto" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                                    @else
+                                        <img src="{{ asset('admin/images/faces/face1.jpg') }}" alt="Default" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                                    @endif
+                                </td>
+                                <td>{{ $guru->name }}</td>
+                                <td>{{ $guru->nip ?? '-' }}</td>
+                                <td>{{ $guru->position }}</td>
+                                <td>
+                                    @php
+                                        $badgeColor = match($guru->status) {
+                                            'PNS' => 'success',
+                                            'GTY' => 'info',
+                                            'Honorer' => 'warning',
+                                            default => 'secondary'
+                                        };
+                                    @endphp
+                                    <label class="badge badge-{{ $badgeColor }}">{{ $guru->status }}</label>
+                                </td>
+                                <td>
+                                    <a href="{{ route('admin.guru.edit', $guru->id) }}" class="btn btn-warning btn-sm">
+                                        <i class="mdi mdi-pencil"></i>
+                                    </a>
+                                    <form action="{{ route('admin.guru.destroy', $guru->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="mdi mdi-delete"></i>
                                         </button>
-                                        <button class="btn btn-danger btn-sm btn-icon-text">
-                                            <i class="mdi mdi-delete"></i> Hapus
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>2</td>
-                                    <td class="py-1">
-                                        <img src="{{ asset('admin/images/faces/face2.jpg') }}" alt="image" />
-                                    </td>
-                                    <td>Siti Aminah, S.Pd</td>
-                                    <td>-</td>
-                                    <td>Guru Matematika</td>
-                                    <td><label class="badge badge-gradient-warning">Honorer</label></td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm btn-icon-text">
-                                            <i class="mdi mdi-pencil"></i> Edit
-                                        </button>
-                                        <button class="btn btn-danger btn-sm btn-icon-text">
-                                            <i class="mdi mdi-delete"></i> Hapus
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>3</td>
-                                    <td class="py-1">
-                                        <img src="{{ asset('admin/images/faces/face3.jpg') }}" alt="image" />
-                                    </td>
-                                    <td>Budi Santoso</td>
-                                    <td>-</td>
-                                    <td>Tata Usaha</td>
-                                    <td><label class="badge badge-gradient-info">Staff</label></td>
-                                    <td>
-                                        <button class="btn btn-info btn-sm btn-icon-text">
-                                            <i class="mdi mdi-pencil"></i> Edit
-                                        </button>
-                                        <button class="btn btn-danger btn-sm btn-icon-text">
-                                            <i class="mdi mdi-delete"></i> Hapus
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    </div>
+                                    </form>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center">Belum ada data guru/staff.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-3">
+                    {{ $gurus->links() }}
+                </div>
             </div>
         </div>
     </div>
+</div>
 @endsection

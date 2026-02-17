@@ -24,16 +24,17 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-12 mx-auto">
-                    <h3>COBA</h3>
-                    <p>Konten sejarah MI Nurul Iman akan diletakkan di sini. Anda dapat menyalin teks panjang mengenai sejarah dan perkembangan sekolah di bagian ini.</p>
-                    <p>Misalnya, informasi tahun berdiri, pendiri, dan tonggak sejarah penting madrasah.</p>
-                    
-                    <h4 class="mt-4">Perkembangan dan Visi</h4>
-                    <p>Sejak didirikan pada tahun [Tahun], MI Nurul Iman terus berkomitmen menyediakan pendidikan terbaik...</p>
-                    
+                    @if($profile && $profile->history_image)
+                        <div class="mb-4 text-center">
+                            <img src="{{ asset('storage/' . $profile->history_image) }}" class="img-fluid rounded shadow" alt="Sejarah Madrasah">
+                        </div>
+                    @endif
+
+                    <div class="content-text">
+                        {!! nl2br(e($profile->history ?? 'Data sejarah sekolah belum tersedia.')) !!}
                     </div>
+                </div>
             </div>
         </div>
     </section>
-
 @endsection

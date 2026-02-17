@@ -1,37 +1,50 @@
 @extends('layouts.admin')
 
-@section('title', 'Struktur Organisasi')
-
 @section('content')
-<div class="page-header">
-    <h3 class="page-title"> Struktur Organisasi </h3>
-</div>
-
 <div class="row">
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Update Bagan Struktur</h4>
-                <p class="card-description"> Upload gambar bagan struktur organisasi terbaru (Format: JPG/PNG) </p>
+                <h4 class="card-title">Edit Struktur Organisasi</h4>
+                <p class="card-description">Update gambar struktur organisasi sekolah</p>
                 
-                <form class="forms-sample">
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                @if(session('info'))
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ session('info') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                <form class="forms-sample" action="{{ route('admin.struktur.update') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
                     
                     <div class="form-group">
-                        <label>Upload Gambar Bagan</label>
-                        <input type="file" name="img[]" class="file-upload-default">
-                        <div class="input-group col-xs-12">
-                            <input type="file" class="form-control file-upload-info" placeholder="Pilih file gambar...">
-                        </div>
+                        <label for="structure_image">Gambar Bagan Struktur</label>
+                        <input type="file" class="form-control @error('structure_image') is-invalid @enderror" id="structure_image" name="structure_image" accept="image/*">
+                        <small class="text-muted">Format: JPG, PNG. Maks: 5MB.</small>
+                        @if($profile->structure_image)
+                            <div class="mt-4 mb-4 text-center border p-3">
+                                <p>Gambar Saat Ini:</p>
+                                <img src="{{ asset('storage/' . $profile->structure_image) }}" alt="Current Structure" class="img-fluid" style="max-height: 500px;">
+                            </div>
+                        @else
+                            <div class="mt-4 mb-4 text-center text-muted">Belum ada gambar struktur yang diupload.</div>
+                        @endif
+                        @error('structure_image')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <div class="form-group">
-                        <label>Pratinjau Gambar Saat Ini:</label>
-                        <div class="mt-2">
-                            <img src="{{ asset('admin/images/dashboard/img_1.jpg') }}" alt="Struktur Saat Ini" class="img-fluid rounded" style="max-height: 300px;">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-gradient-primary me-2">Upload & Simpan</button>
+                    <button type="submit" class="btn btn-primary me-2">Upload Update Struktur</button>
+                    
                 </form>
             </div>
         </div>

@@ -1,73 +1,58 @@
 @extends('layouts.admin')
 
-@section('title', 'Galeri Sekolah')
-
 @section('content')
-<div class="page-header">
-    <h3 class="page-title">
-        <span class="page-title-icon bg-gradient-primary text-white me-2">
-            <i class="mdi mdi-image-multiple"></i>
-        </span> Galeri Kegiatan
-    </h3>
-    <nav aria-label="breadcrumb">
-        <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Galeri</li>
-        </ul>
-    </nav>
-</div>
-
 <div class="row">
-    <div class="col-12 grid-margin stretch-card">
+    <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Upload Foto Baru</h4>
-                <form class="form-inline">
-                    <label class="sr-only" for="judulFoto">Judul Kegiatan</label>
-                    <input type="text" class="form-control mb-2 mr-sm-2" id="judulFoto" placeholder="Judul Kegiatan (Misal: Upacara)">
-                    
-                    <div class="input-group mb-2 mr-sm-2">
-                        <input type="file" class="form-control">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="card-title">Galeri Foto Sekolah</h4>
+                    <a href="{{ route('admin.galeri.create') }}" class="btn btn-primary btn-sm">
+                        <i class="mdi mdi-plus"></i> Tambah Foto
+                    </a>
+                </div>
+
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+                @endif
+
+                <div class="row">
+                    @forelse($galleries as $gallery)
+                    <div class="col-md-3 col-sm-6 mb-4">
+                        <div class="card h-100">
+                            <img src="{{ asset('storage/' . $gallery->image) }}" class="card-img-top" alt="{{ $gallery->title }}" style="height: 200px; object-fit: cover;">
+                            <div class="card-body p-3">
+                                <h6 class="card-title mb-1">{{ Str::limit($gallery->title, 30) }}</h6>
+                                <p class="text-muted small mb-2">
+                                    <i class="mdi mdi-calendar"></i> {{ $gallery->event_date ? date('d M Y', strtotime($gallery->event_date)) : '-' }}
+                                </p>
+                                <div class="d-flex justify-content-between">
+                                    <a href="{{ route('admin.galeri.edit', $gallery->id) }}" class="btn btn-warning btn-sm btn-icon-text">
+                                        <i class="mdi mdi-pencil"></i> Edit
+                                    </a>
+                                    <form action="{{ route('admin.galeri.destroy', $gallery->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus foto ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm btn-icon-text">
+                                            <i class="mdi mdi-delete"></i> Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="col-12 text-center py-5">
+                        <h4 class="text-muted">Belum ada foto di galeri.</h4>
+                    </div>
+                    @endforelse
+                </div>
                 
-                    <button type="submit" class="btn btn-gradient-primary mb-2">Upload</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12">
-        <div class="row">
-            <div class="col-md-4 grid-margin stretch-card">
-                <div class="card">
-                    <img src="{{ asset('admin/images/dashboard/img_1.jpg') }}" class="card-img-top" alt="foto">
-                    <div class="card-body p-3">
-                        <h5 class="card-title mb-1">Upacara Bendera</h5>
-                        <p class="card-text text-muted small">Senin, 20 Nov 2025</p>
-                        <button class="btn btn-block btn-inverse-danger btn-sm mt-2 w-100">Hapus Foto</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 grid-margin stretch-card">
-                <div class="card">
-                    <img src="{{ asset('admin/images/dashboard/img_2.jpg') }}" class="card-img-top" alt="foto">
-                    <div class="card-body p-3">
-                        <h5 class="card-title mb-1">Lomba Mewarnai</h5>
-                        <p class="card-text text-muted small">Kamis, 15 Nov 2025</p>
-                        <button class="btn btn-block btn-inverse-danger btn-sm mt-2 w-100">Hapus Foto</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 grid-margin stretch-card">
-                <div class="card">
-                    <img src="{{ asset('admin/images/dashboard/img_3.jpg') }}" class="card-img-top" alt="foto">
-                    <div class="card-body p-3">
-                        <h5 class="card-title mb-1">Kunjungan Pengawas</h5>
-                        <p class="card-text text-muted small">Rabu, 10 Nov 2025</p>
-                        <button class="btn btn-block btn-inverse-danger btn-sm mt-2 w-100">Hapus Foto</button>
-                    </div>
+                <div class="mt-3">
+                    {{ $galleries->links() }}
                 </div>
             </div>
         </div>

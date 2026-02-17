@@ -7,37 +7,38 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8 col-12">
-                    <nav aria-label="breadcrumb">
+                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">Beranda</a></li>
-                            <li class="breadcrumb-item"><a href="#">Profil</a></li>
+                             <li class="breadcrumb-item"><a href="#">Profil</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Visi & Misi</li>
                         </ol>
                     </nav>
-                    <h2 class="text-white">Visi dan Misi MI Nurul Iman</h2>
+                    <h2 class="text-white">Visi & Misi Madrasah</h2>
                 </div>
             </div>
         </div>
     </header>
     
-    <section class="section-padding">
+    <section class="section-padding bg-light">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-10 col-12 mx-auto">
-                    
-                    <h3 class="mb-4 text-center">Visi</h3>
-                    <blockquote class="text-center">
-                        "Terwujudnya Generasi Emas yang Cerdas, Mandiri, dan Berakhlak Karimah di Era Digital."
-                    </blockquote>
-                    
-                    <h3 class="mb-3 mt-5">Misi</h3>
-                    <ul class="list-unstyled">
-                        <li class="mb-3"><i class="bi-check-circle-fill me-2 text-success"></i>Meningkatkan kualitas pembelajaran yang terintegrasi dengan teknologi.</li>
-                        <li class="mb-3"><i class="bi-check-circle-fill me-2 text-success"></i>Menanamkan nilai-nilai keislaman dan etika dalam setiap kegiatan.</li>
-                        <li class="mb-3"><i class="bi-check-circle-fill me-2 text-success"></i>Mengembangkan potensi akademik dan non-akademik peserta didik.</li>
-                    </ul>
+           <div class="row">
+                <div class="col-lg-6 col-12 mb-4 mb-lg-0">
+                    <div class="custom-block bg-white shadow-lg p-5 h-100">
+                        <h3 class="text-center mb-4 text-primary">VISI</h3>
+                        <p class="lead text-center fst-italic">"{{ $schoolProfile->vision ?? 'Menjadi madrasah unggul yang melahirkan generasi cerdas, mandiri, dan berakhlak mulia.' }}"</p>
+                    </div>
                 </div>
-            </div>
+
+                <div class="col-lg-6 col-12">
+                    <div class="custom-block bg-white shadow-lg p-5 h-100">
+                        <h3 class="text-center mb-4 text-primary">MISI</h3>
+                         <div class="content-text">
+                            {!! nl2br(e($schoolProfile->mission ?? 'Data misi belum tersedia.')) !!}
+                        </div>
+                    </div>
+                </div>
+           </div>
         </div>
     </section>
 @endsection

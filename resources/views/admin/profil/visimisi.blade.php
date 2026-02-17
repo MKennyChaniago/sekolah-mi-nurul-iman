@@ -1,34 +1,42 @@
 @extends('layouts.admin')
 
-@section('title', 'Visi & Misi')
-
 @section('content')
-<div class="page-header">
-    <h3 class="page-title"> Visi & Misi </h3>
-</div>
-
 <div class="row">
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Edit Visi & Misi Sekolah</h4>
+                <h4 class="card-title">Edit Visi & Misi</h4>
+                <p class="card-description">Update visi dan misi sekolah</p>
                 
-                <form class="forms-sample">
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                <form class="forms-sample" action="{{ route('admin.visimisi.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
                     
                     <div class="form-group">
-                        <label for="visi"><strong>Visi</strong> (Cita-cita Sekolah)</label>
-                        <textarea class="form-control" id="visi" rows="3" placeholder="Contoh: Terwujudnya generasi yang Islami..."></textarea>
+                        <label for="vision">Visi Sekolah</label>
+                        <textarea class="form-control @error('vision') is-invalid @enderror" id="vision" name="vision" rows="5" placeholder="Tulis visi sekolah..." required>{{ old('vision', $profile->vision) }}</textarea>
+                        @error('vision')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
-
-                    <hr>
 
                     <div class="form-group">
-                        <label for="misi"><strong>Misi</strong> (Langkah-langkah)</label>
-                        <textarea class="form-control" id="misi" rows="10" placeholder="1. Melaksanakan pembelajaran aktif..."></textarea>
-                        <small class="text-muted">Gunakan nomor (1, 2, 3) atau poin-poin untuk memisahkan misi.</small>
+                        <label for="mission">Misi Sekolah</label>
+                        <textarea class="form-control @error('mission') is-invalid @enderror" id="mission" name="mission" rows="10" placeholder="Tulis misi sekolah..." required>{{ old('mission', $profile->mission) }}</textarea>
+                        <small class="text-muted">Disarankan menggunakan poin-poin.</small>
+                        @error('mission')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <button type="submit" class="btn btn-gradient-primary me-2">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-primary me-2">Simpan Perubahan</button>
                 </form>
             </div>
         </div>

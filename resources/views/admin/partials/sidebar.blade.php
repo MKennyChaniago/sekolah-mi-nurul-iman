@@ -22,15 +22,15 @@
       </a>
     </li>
 
-    <li class="nav-item {{ request()->routeIs('admin.sejarah*', 'admin.visimisi*', 'admin.struktur*') ? 'active' : '' }}">
+    <li class="nav-item {{ request()->routeIs('admin.sejarah*', 'admin.visimisi*', 'admin.struktur*', 'admin.kontak*', 'admin.beranda*') ? 'active' : '' }}">
       <a class="nav-link" data-bs-toggle="collapse" href="#profil-sekolah" 
-         aria-expanded="{{ request()->routeIs('admin.sejarah*', 'admin.visimisi*', 'admin.struktur*') ? 'true' : 'false' }}" 
+         aria-expanded="{{ request()->routeIs('admin.sejarah*', 'admin.visimisi*', 'admin.struktur*', 'admin.kontak*', 'admin.beranda*') ? 'true' : 'false' }}" 
          aria-controls="profil-sekolah">
         <span class="menu-title">Profil Sekolah</span>
         <i class="menu-arrow"></i>
         <i class="mdi mdi-domain menu-icon"></i>
       </a>
-      <div class="collapse {{ request()->routeIs('admin.sejarah*', 'admin.visimisi*', 'admin.struktur*') ? 'show' : '' }}" id="profil-sekolah">
+      <div class="collapse {{ request()->routeIs('admin.sejarah*', 'admin.visimisi*', 'admin.struktur*', 'admin.kontak*') ? 'show' : '' }}" id="profil-sekolah">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item"> 
             <a class="nav-link {{ request()->routeIs('admin.sejarah') ? 'active' : '' }}" href="{{ route('admin.sejarah') }}">Sejarah Madrasah</a>
@@ -40,6 +40,12 @@
           </li>
           <li class="nav-item"> 
             <a class="nav-link {{ request()->routeIs('admin.struktur') ? 'active' : '' }}" href="{{ route('admin.struktur') }}">Struktur Organisasi</a>
+          </li>
+          <li class="nav-item"> 
+            <a class="nav-link {{ request()->routeIs('admin.beranda') ? 'active' : '' }}" href="{{ route('admin.beranda') }}">Pengaturan Beranda</a>
+          </li>
+          <li class="nav-item"> 
+            <a class="nav-link {{ request()->routeIs('admin.kontak') ? 'active' : '' }}" href="{{ route('admin.kontak') }}">Kontak & Medsos</a>
           </li>
         </ul>
       </div>
